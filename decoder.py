@@ -1,7 +1,5 @@
-a=str(input("Enter Your text to Decode: "))
-#110-444
-#230-A
-#chr()
+import base64
+a=str(input("\nEnter Your text to Decode: "))
 dt,cache='',''
 chars=[]
 i=0
@@ -22,14 +20,13 @@ for i in chars:
     if i[-1]=='c':
         char=0
         num=i[1:-2]
-        for i in range(1,4):
-            char=char+int(num[-i])*5**(i-1)
+        char=int(str(num),5)
         dt=dt+str(chr(char))
     else:
         if i[-1]=='n':
             char=0
             num=i[:-2]
-            for i in range(1,len(num)+1):
-                char=char+int(num[-i])*5**(i-1)
+            char=int(str(num),5)
             dt=dt+str(char)
-print(dt)
+dt = base64.b64decode(dt.encode("ascii")).decode("ascii")
+print('\nDecoded text: '+dt)
