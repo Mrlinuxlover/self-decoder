@@ -1,10 +1,16 @@
 #! /usr/bin/python3
 import sys
 import base64
-if sys.argv[-1]!=sys.argv[0]:
-    a=str(sys.argv[-1])
+if sys.argv[1]=='-f':
+	if sys.argv[1]!=sys.argv[-1]:
+		fname=open(str(sys.argv[2]),'r')
+		a=fname.read()
+		fname.close()
 else:
-    a=str(input("\nEnter Your text to Decode: "))
+	if sys.argv[-1]!=sys.argv[1]:
+		a=str(sys.argv[-1])
+	else:
+		a=str(input("\nEnter Your text to Decode: "))
 dt,cache='',''
 chars=[]
 i=0
@@ -33,5 +39,5 @@ for i in chars:
             num=i[:-2]
             char=int(str(num),5)
             dt=dt+str(char)
-dt = base64.b64decode(dt.encode("ascii")).decode("ascii")
-print('\nDecoded text: '+dt)
+dt = base64.b64decode(dt.encode("UTF-8")).decode("UTF-8")
+print('\nDecoded text:\n'+dt+'\n')
