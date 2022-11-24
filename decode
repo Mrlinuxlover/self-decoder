@@ -1,0 +1,55 @@
+#! /usr/bin/python3
+import sys
+import base64
+savefile=0
+if sys.argv[1]=='-f':
+	if sys.argv[1]!=sys.argv[-1]:
+		fname=open(str(sys.argv[2]),'r')
+		a=fname.read()
+		fname.close()
+else:
+        if sys.argv[1]=='-fs':
+                fname=open(str(sys.argv[2]),'r')
+                a=fname.read()
+                fname.close()
+                savefile=sys.argv[2]
+        else:
+                if sys.argv[-1]==sys.argv[1]:
+                        a=str(sys.argv[-1])
+                else:
+                        a=str(input("\nEnter Your text to Decode: "))
+dt,cache='',''
+chars=[]
+i=0
+while i<len(a):
+    if a[i]>'4':
+        if cache!='':
+            chars.append(str(cache)+",n")
+            cache=''
+        chars.append(str(a[i:i+4])+",c")
+        i+=4
+    else:
+        if a[i]<'5':
+            cache=str(cache)+a[i]
+            i+=1
+            if i==len(a):
+                chars.append(str(cache)+",n")
+for i in chars:
+    if i[-1]=='c':
+        char=0
+        num=i[1:-2]
+        char=int(str(num),5)
+        dt=dt+str(chr(char))
+    else:
+        if i[-1]=='n':
+            char=0
+            num=i[:-2]
+            char=int(str(num),5)
+            dt=dt+str(char)
+dt = base64.b64decode(dt.encode("UTF-8")).decode("UTF-8")
+if savefile==0:
+        print('\nDecoded text:\n'+dt+'\n')
+else:
+        f=open('decoded-'+savefile,'w')
+        f.write(dt)
+        f.close()

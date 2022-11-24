@@ -1,0 +1,62 @@
+#! /usr/bin/python3
+import sys
+import random as rn
+import datetime as dt
+import base64
+def multi_input():
+    try:
+        while True:
+            data=input()
+            if not data: break
+            yield data
+    except KeyboardInterrupt:
+        return
+savefile=0
+if sys.argv[1]=='-f':
+    if sys.argv[1]!=sys.argv[-1]:
+        fname=open(str(sys.argv[2]),'r')
+        text=fname.read()
+        fname.close()
+else:
+    if sys.argv[1]=='-fs':
+        fname=open(str(sys.argv[2]),'r')
+        text=fname.read()
+        fname.close()
+        savefile=sys.argv[2]
+    else:
+        if sys.argv[-1]!=sys.argv[0]:
+            text=''
+            for i in sys.argv[1:]:
+                if i==sys.argv[1]:
+                    text=text+i
+                else:
+                    text=text+' '+i
+        else:
+            print("\nEnter Your text to Encode: ")
+            lst=list(multi_input())
+            text=''
+            for i in lst:
+                if lst[0]==i:
+                    text=text+str(i)
+                else:
+                    text=text+'\n'+str(i)
+text = base64.b64encode(text.encode("UTF-8")).decode("UTF-8")
+code=''
+for i in range(0,len(text)):
+    a=ord(text[i])
+    b=''
+    while a//5>=0:
+        b=str(a%5)+b
+        if a//5==0:
+            break
+        a=a//5
+    b=int(b)
+    code=code+str(rn.randint(5,9))+str(b)
+print()
+if savefile==0:
+    print('\nEncoded text:\n'+code+'\n')
+else:
+    f=open('encoded-'+savefile,'w')
+    f.write(code)
+    f.close()
+    print('\nSaved!')
